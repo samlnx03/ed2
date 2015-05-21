@@ -1,0 +1,97 @@
+// RAM Model
+//
+// +-----------------------------+
+// |    Copyright 1996 DOULOS    |
+// |       Library: Memory       |
+// |   designer : John Aynsley   |
+// +-----------------------------+
+
+module RamChip (Address, Data, CS, WE, OE);
+
+parameter AddressSize = 1;
+parameter WordSize = 1;
+
+input [AddressSize-1:0] Address;
+inout [WordSize-1:0] Data;
+input CS, WE, OE;
+
+reg [WordSize-1:0] Mem [0:1<<AddressSize];
+
+assign Data = (!CS && !OE) ? Mem[Address] : {WordSize{1'bz}};
+
+always @(CS or WE)
+  if (!CS && !WE)
+    Mem[Address] = Data;
+
+always @(WE or OE)
+  if (!WE && !OE)
+    $display("Operational error in RamChip: OE and WE both active");
+
+endmodule
+
+// test bench
+module main;
+    reg [4:0] Address;
+    reg [3:0] Data;
+    reg CS, WE, OE;
+    
+    RamChip #(5,3) RAM1(Address, Data, CS, WE, OE);
+    // #(addressSize, WordSize) = ram 32x4 32 localidades de 4 bits c/u
+    // almacenar el programa
+    initial begin
+        OE=1;   // Output enable inactive
+        CS=0;   // chip select actve 
+        WE=1;   // write enable inactive
+        
+        Address=0;  // especifico la direccion
+        Data=1;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+        
+        Address=1;  // especifico la direccion
+        Data=10;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+
+        Address=2;  // especifico la direccion
+        Data=2;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+
+        Address=3;  // especifico la direccion
+        Data=20;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+        
+        Address=4;  // especifico la direccion
+        Data=3;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+
+        Address=5;  // especifico la direccion
+        Data=25;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+
+        Address=6;  // especifico la direccion
+        Data=0;     // y el dato a almacenar
+        WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
+        #1         // delay de asignacion para la escritura
+        WE=1;       // write enable inactive
+
+    end
+  
+  initial 
+    begin
+      #10;  // esperar la carga del prog.
+      $display("Hello, World");
+      $finish ;
+    end
+
+endmodule
