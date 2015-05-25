@@ -34,64 +34,78 @@ module main;
     reg [4:0] Address;
     reg [3:0] Data;
     reg CS, WE, OE;
+
+    wire [3:0] DataMem;
+
+    parameter Delay=2;
+    assign DataMem=Data;
     
-    RamChip #(5,3) RAM1(Address, Data, CS, WE, OE);
+    RamChip #(5,4) RAM1(Address, DataMem, CS, WE, OE);
     // #(addressSize, WordSize) = ram 32x4 32 localidades de 4 bits c/u
     // almacenar el programa
     initial begin
         OE=1;   // Output enable inactive
         CS=0;   // chip select actve 
         WE=1;   // write enable inactive
+	#Delay;
         
         Address=0;  // especifico la direccion
         Data=1;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
         
         Address=1;  // especifico la direccion
         Data=10;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
 
         Address=2;  // especifico la direccion
         Data=2;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
 
         Address=3;  // especifico la direccion
         Data=20;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
         
         Address=4;  // especifico la direccion
         Data=3;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
 
         Address=5;  // especifico la direccion
         Data=25;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
 
         Address=6;  // especifico la direccion
         Data=0;     // y el dato a almacenar
         WE=0;       // y almaceno (notar que son asignaciones bloqueantes)
         #1         // delay de asignacion para la escritura
         WE=1;       // write enable inactive
+	#Delay;
 
     end
   
   initial 
     begin
-      #10;  // esperar la carga del prog.
-      $display("Hello, World");
-      $finish ;
+      //#10;  // esperar la carga del prog.
+	$display("Time\tAdd\tData\tWE\tMem");
+	$monitor("%3t\t%d\t%d\t%d\t%d", $time, Address, Data, WE, DataMem);
+	#1000 $finish ;
     end
 
 endmodule
