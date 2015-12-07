@@ -22,6 +22,11 @@
 //		scan codes y teroria
 //		http://www.eecg.toronto.edu/~jayar/ece241_08F/AudioVideoCores/ps2/ps2.html
 //
+//		ligas interesantes:
+//		https://github.com/ktemkin/SoftAVR/blob/master/sources/Basys2.ucf
+//		https://reference.digilentinc.com/basys2:basys2:ref_manual
+//		http://students.iitk.ac.in/eclub/assets/tutorials/keyboard.pdf
+//
 //////////////////////////////////////////////////////////////////////////////////
 module keyboard(
 	input wire clk,// Clock pin form keyboard
